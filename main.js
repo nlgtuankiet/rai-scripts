@@ -57,7 +57,6 @@ async function getItemIds() {
 }
 
 async function deleteItem(id) {
-  console.log(`delete ${id}`)
   await ensureToken()
   const response = await axios({
     method: 'delete',
