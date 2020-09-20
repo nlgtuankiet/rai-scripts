@@ -78,6 +78,7 @@ async function main() {
   let deleteCount = 0
   const startTime = (new Date()).getMilliseconds()
   let encounterError = false
+  await ensureToken()
   while (true) {
     encounterError = false
     try {
