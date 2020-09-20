@@ -76,7 +76,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 async function main() {
   let itemIds = await getItemIds()
   let deleteCount = 0
-  let startTime = getMilis()
+  const startTime = (new Date()).getMilliseconds()
   let encounterError = false
   while (true) {
     encounterError = false
