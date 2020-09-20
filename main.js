@@ -77,16 +77,15 @@ async function main() {
   await ensureToken()
   let itemIds = await getItemIds()
   let deleteCount = 0
-  const startTime = (new Date()).getMilliseconds()
+  const startTime = Date.now()
   let encounterError = false
   while (true) {
     encounterError = false
     try {
       let tasks = itemIds.map((e) => deleteItem(e))
       await Promise.all(tasks)
-      let endTime = getMilis()
       deleteCount = deleteCount + itemIds.length
-      console.log(`Deleted ${deleteCount} items, speed: ${(deleteCount / ((endTime - startTime) / 1000))} items/s`)
+      console.log(`Deleted ${deleteCount} items, speed: ${(deleteCount / ((Date.now() - startTime) / 1000))} items/s`)
     } catch (e) {
       encounterError = true
     }
