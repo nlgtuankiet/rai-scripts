@@ -79,10 +79,8 @@ async function main() {
     startTime = getSeconds()
     let tasks = itemIds.map((e) => deleteItem(e))
     await Promise.all(tasks)
-    deleteCount =  deleteCount + itemIds.length
     let endTime = getSeconds()
-
-    console.log(`Deleted ${deleteCount} items, speed: ${(deleteCount / (endTime - startTime))} items/s`)
+    console.log(`Deleted ${deleteCount} items, speed: ${(itemIds.length / (endTime - startTime))} items/s`)
     itemIds = await getItemIds()
   }
 }
