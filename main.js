@@ -45,7 +45,6 @@ async function ensureToken() {
 
 
 async function getItemIds() {
-  await ensureToken()
   const response = await axios({
     method: 'get',
     url: "https://recommendationengine.googleapis.com/v1beta1/projects/tikiandroid-1047/locations/global/catalogs/default_catalog/catalogItems/",
@@ -57,7 +56,6 @@ async function getItemIds() {
 }
 
 async function deleteItem(id) {
-  await ensureToken()
   const response = await axios({
     method: 'delete',
     url: `https://recommendationengine.googleapis.com/v1beta1/projects/tikiandroid-1047/locations/global/catalogs/default_catalog/catalogItems/${id.trim()}`,
@@ -95,6 +93,7 @@ async function main() {
       console.log("encounter error, delay a bit")
       await delay(3000)
     }
+    await ensureToken()
     itemIds = await getItemIds()
   }
 }
