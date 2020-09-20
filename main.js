@@ -93,8 +93,19 @@ async function main() {
       console.log("encounter error, delay a bit")
       await delay(3000)
     }
-    await ensureToken()
-    itemIds = await getItemIds()
+
+    async function refreshItemId() {
+      try {
+        await ensureToken()
+        itemIds = await getItemIds()
+      } catch (e) {
+        console.log("encounter error, delay a bit")
+        await delay(3000)
+        await refreshItemId()
+      }
+    }
+
+    await refreshItemId()
   }
 }
 
