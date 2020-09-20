@@ -74,17 +74,28 @@ async function deleteItem(id) {
 function getMilis() {
   return (new Date()).getMilliseconds()
 }
+const delay = ms => new Promise(res => setTimeout(res, ms));
 
 async function main() {
   let itemIds = await getItemIds()
   let deleteCount = 0
   let startTime = getMilis()
-  while (itemIds.length !== 0) {
-    let tasks = itemIds.map((e) => deleteItem(e))
-    await Promise.all(tasks)
-    let endTime = getMilis()
-    deleteCount = deleteCount + itemIds.length
-    console.log(`Deleted ${deleteCount} items, speed: ${(deleteCount / ((endTime - startTime) / 1000))} items/s`)
+  let encounterError = false
+  while (true) {
+    encounterError = false
+    try {
+      let tasks = itemIds.map((e) => deleteItem(e))
+      await Promise.all(tasks)
+      let endTime = getMilis()
+      deleteCount = deleteCount + itemIds.length
+      console.log(`Deleted ${deleteCount} items, speed: ${(deleteCount / ((endTime - startTime) / 1000))} items/s`)
+    } catch (e) {
+      encounterError = true
+    }
+    if (encounterError) {
+      console.log("encounter error, delay a bit")
+      await delay(3000)
+    }
     itemIds = await getItemIds()
   }
 }
