@@ -74,11 +74,11 @@ function getMilis() {
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 async function main() {
+  await ensureToken()
   let itemIds = await getItemIds()
   let deleteCount = 0
   const startTime = (new Date()).getMilliseconds()
   let encounterError = false
-  await ensureToken()
   while (true) {
     encounterError = false
     try {
