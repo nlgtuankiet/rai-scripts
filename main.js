@@ -74,8 +74,9 @@ async function deleteItem(id) {
 async function main() {
   let itemIds = await getItemIds()
   let deleteCount = 0
-  const startTime = getSeconds()
+  let startTime = getSeconds()
   while (itemIds.length !== 0) {
+    startTime = getSeconds()
     let tasks = itemIds.map((e) => deleteItem(e))
     await Promise.all(tasks)
     deleteCount =  deleteCount + itemIds.length
