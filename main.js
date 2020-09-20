@@ -71,16 +71,20 @@ async function deleteItem(id) {
   }
 }
 
+function getMilis() {
+  return (new Date()).getMilliseconds()
+}
+
 async function main() {
   let itemIds = await getItemIds()
   let deleteCount = 0
-  let startTime = getSeconds()
+  let startTime = getMilis()
   while (itemIds.length !== 0) {
     startTime = getSeconds()
     let tasks = itemIds.map((e) => deleteItem(e))
     await Promise.all(tasks)
-    let endTime = getSeconds()
-    console.log(`Deleted ${deleteCount} items, speed: ${(itemIds.length / (endTime - startTime))} items/s`)
+    let endTime = getMilis()
+    console.log(`Deleted ${deleteCount} items, speed: ${(itemIds.length / ((endTime - startTime) / 1000))} items/s`)
     itemIds = await getItemIds()
   }
 }
