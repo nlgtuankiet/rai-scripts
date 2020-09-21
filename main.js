@@ -25,12 +25,16 @@ async function execute(command) {
 let token = null
 let lastRefreshTokenTime = getSeconds()
 
-async function ensureToken() {
+async function ensureToken(force) {
   async function refreshToken() {
     console.log("refreshing token")
     token = await execute("gcloud auth print-access-token rai-520@tikiandroid-1047.iam.gserviceaccount.com")
     token = token.trim()
     lastRefreshTokenTime = getSeconds()
+  }
+
+  if (force) {
+    await refreshToken()
   }
 
   if (!token) {
@@ -89,6 +93,7 @@ async function main() {
         console.log("encounter error, delay a bit")
         console.log(JSON.stringify(e))
         await delay(3000)
+        await ensureToken(true)
         await tryDelete()
       }
     }
@@ -103,6 +108,7 @@ async function main() {
         console.log("encounter error, delay a bit")
         console.log(JSON.stringify(e))
         await delay(3000)
+        await ensureToken(true)
         await refreshItemId()
       }
     }
