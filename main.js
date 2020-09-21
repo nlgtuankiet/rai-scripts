@@ -78,21 +78,22 @@ async function main() {
   let itemIds = await getItemIds()
   let deleteCount = 0
   const startTime = Date.now()
-  let encounterError = false
   while (true) {
-    encounterError = false
-    try {
-      let tasks = itemIds.map((e) => deleteItem(e))
-      await Promise.all(tasks)
-      deleteCount = deleteCount + itemIds.length
-      console.log(`Deleted ${deleteCount} items, speed: ${(deleteCount / ((Date.now() - startTime) / 1000))} items/s`)
-    } catch (e) {
-      encounterError = true
+    async function tryDelete() {
+      try {
+        let tasks = itemIds.map((e) => deleteItem(e))
+        await Promise.all(tasks)
+        deleteCount = deleteCount + itemIds.length
+        console.log(`Deleted ${deleteCount} items, speed: ${(deleteCount / ((Date.now() - startTime) / 1000))} items/s`)
+      } catch (e) {
+        console.log("encounter error, delay a bit")
+        console.log(JSON.stringify(e))
+        await delay(3000)
+        await tryDelete()
+      }
     }
-    if (encounterError) {
-      console.log("encounter error, delay a bit")
-      await delay(3000)
-    }
+
+    await tryDelete()
 
     async function refreshItemId() {
       try {
@@ -100,6 +101,7 @@ async function main() {
         itemIds = await getItemIds()
       } catch (e) {
         console.log("encounter error, delay a bit")
+        console.log(JSON.stringify(e))
         await delay(3000)
         await refreshItemId()
       }
