@@ -46,11 +46,13 @@ fun main(args: Array<String>): Unit = runBlocking {
   )
 
   val channel = Channel<Int>()
-  val rate = (12000 / 60)
+  val rate = (12000 / 60) - 2
   val readRateLimiter = RateLimiter.create(rate.toDouble())
   val inputRateLimiter = RateLimiter.create((rate + 100).toDouble())
 
   val firstItem = args.first().toInt()
+
+  println("")
 
   launch {
     (firstItem..(firstItem + 24035720)).forEach { id ->
@@ -87,7 +89,8 @@ fun main(args: Array<String>): Unit = runBlocking {
         val totalDeleted = deleted.get()
         val totalNotFound = notFound.get()
         val speed = 1.0 * operationCount.get() / ((endTime - startTime) / 1000f)
-        println("deleted ${totalDeleted} not found ${totalNotFound}, ${speed} items/s, item: $item")
+        val time = (24035720 - item).toDouble() / rate / 60 / 60
+        println("deleted ${totalDeleted} not found ${totalNotFound}, ${speed} items/s, item: $item, ${time} hours left")
       }
     }
   }
