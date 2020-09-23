@@ -59,9 +59,6 @@ fun main(args: Array<String>): Unit = runBlocking {
         val actualInt = id.toIntOrNull()
         if (actualInt != null) {
           channel.send(actualInt)
-          if (sendCount++ % 1000 == 0) {
-            println("send $sendCount")
-          }
         }
       }
     }
