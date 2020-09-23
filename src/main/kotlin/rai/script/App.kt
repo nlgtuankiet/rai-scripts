@@ -50,12 +50,12 @@ fun main(args: Array<String>): Unit = runBlocking {
   val readRateLimiter = RateLimiter.create(rate.toDouble())
   val inputRateLimiter = RateLimiter.create((rate + 100).toDouble())
 
-  val firstItem = 16376411
+  val firstItem = args.first().toInt()
 
   launch {
     (firstItem..(firstItem + 24035720)).forEach { id ->
         inputRateLimiter.acquire()
-        channel.offer(id)
+        channel.send(id)
     }
   }
 
