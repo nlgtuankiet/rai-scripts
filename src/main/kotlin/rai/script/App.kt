@@ -47,7 +47,7 @@ fun main(args: Array<String>): Unit = runBlocking {
   val writeRateLimiter = RateLimiter.create(rate.toDouble())
   val sendRateLimiter = RateLimiter.create(rate.toDouble())
 
-  val firstItem = '' // args[1]
+  val firstItem = "" // args[1]
   val fileName = "../${args[0]}"
   println("fileName: $fileName firstItem: $firstItem")
 
