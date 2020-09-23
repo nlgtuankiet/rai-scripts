@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.io.File
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -44,14 +45,20 @@ fun main(args: Array<String>): Unit = runBlocking {
   val channel = Channel<Int>()
   val rate = (12000 / 60) - 10
   val writeRateLimiter = RateLimiter.create(rate.toDouble())
+  val sendRateLimiter = RateLimiter.create((rate + 100).toDouble())
 
-  val firstItem = args.first().toInt()
+  val firstItem = args[1].toInt()
+  val fileName = "../${args[0]}"
 
-  println("")
+  val ids = File(fileName).readLines()
 
   launch {
-    (firstItem..(firstItem + 24035720)).forEach { id ->
-        channel.send(id)
+    for (id in ids) {
+      val actualId = id.toIntOrNull()
+      if (actualId != null && actualId >=  firstItem) {
+        sendRateLimiter.acquire()
+        channel.send(actualId)
+      }
     }
   }
 
@@ -84,8 +91,7 @@ fun main(args: Array<String>): Unit = runBlocking {
         val totalDeleted = deleted.get()
         val totalNotFound = notFound.get()
         val speed = 1.0 * operationCount.get() / ((endTime - startTime) / 1000f)
-        val time = (24035720 - item).toDouble() / rate / 60 / 60
-        println("deleted ${totalDeleted} not found ${totalNotFound}, ${speed} items/s, item: $item, ${time} hours left")
+        println("deleted ${totalDeleted} not found ${totalNotFound}, ${speed} items/s, item: $item")
       }
     }
   }
