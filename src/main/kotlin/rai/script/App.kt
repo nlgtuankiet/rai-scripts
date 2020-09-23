@@ -45,7 +45,7 @@ fun main(args: Array<String>): Unit = runBlocking {
   val channel = Channel<Int>()
   val rate = (12000 / 60) - 10
   val writeRateLimiter = RateLimiter.create(rate.toDouble())
-  val sendRateLimiter = RateLimiter.create((rate + 100).toDouble())
+  val sendRateLimiter = RateLimiter.create((rate).toDouble())
 
   val firstItem = args[1].toInt()
   val fileName = "../${args[0]}"
