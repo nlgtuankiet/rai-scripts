@@ -49,6 +49,7 @@ fun main(args: Array<String>): Unit = runBlocking {
 
   val firstItem = args[1].toInt()
   val fileName = "../${args[0]}"
+  println("fileName: $fileName firstItem: $firstItem")
 
   val ids = File(fileName).readLines()
 
