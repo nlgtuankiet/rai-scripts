@@ -46,7 +46,7 @@ fun main(args: Array<String>): Unit = runBlocking {
   )
 
   val channel = Channel<Int>()
-  val rate = (12000 / 60) - 2
+  val rate = (12000 / 60) - 10
   val readRateLimiter = RateLimiter.create(rate.toDouble())
   val inputRateLimiter = RateLimiter.create((rate + 100).toDouble())
 
