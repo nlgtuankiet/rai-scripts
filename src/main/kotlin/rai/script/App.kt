@@ -47,19 +47,28 @@ fun main(args: Array<String>): Unit = runBlocking {
   val writeRateLimiter = RateLimiter.create(rate.toDouble())
   val sendRateLimiter = RateLimiter.create(rate.toDouble())
 
-  val firstItem = args[1]
-  val fileName = "../${args[0]}"
-  println("fileName: $fileName firstItem: $firstItem")
+//  val firstItem = args[1]
+//  val fileName = "../${args[0]}"
+//  println("fileName: $fileName firstItem: $firstItem")
+//
+//  val ids = File(fileName).readLines()
+//  var sendCount = 0
+//  launch {
+//    for (id in ids) {
+//      if (id > firstItem) {
+//        val actualInt = id.toIntOrNull()
+//        if (actualInt != null) {
+//          channel.send(actualInt)
+//        }
+//      }
+//    }
+//  }
 
-  val ids = File(fileName).readLines()
-  var sendCount = 0
-  launch {
-    for (id in ids) {
-      if (id > firstItem) {
-        val actualInt = id.toIntOrNull()
-        if (actualInt != null) {
-          channel.send(actualInt)
-        }
+  launch(Dispatchers.IO) {
+    catalogClient.listCatalogItems(catalogName, filter).iterateAll().forEach {
+      it.id.toIntOrNull()?.let {
+        sendRateLimiter.acquire()
+        channel.send(it)
       }
     }
   }
