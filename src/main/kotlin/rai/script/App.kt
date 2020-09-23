@@ -94,6 +94,7 @@ fun main(args: Array<String>): Unit = runBlocking {
           if (ex is NotFoundException) {
             notFound.incrementAndGet()
           } else {
+            File("./error.txt").writeText(ex.message ?: "no error")
             throw ex
           }
         }
@@ -103,6 +104,7 @@ fun main(args: Array<String>): Unit = runBlocking {
         val totalNotFound = notFound.get()
         val speed = 1.0 * operationCount.get() / ((endTime - startTime) / 1000f)
         println("deleted ${totalDeleted} not found ${totalNotFound}, ${speed} items/s, item: $item")
+        File("./process.txt").writeText("to item $item ${System.currentTimeMillis()}")
       }
     }
   }
