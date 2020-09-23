@@ -54,7 +54,6 @@ fun main(args: Array<String>): Unit = runBlocking {
 
   launch {
     (firstItem..(firstItem + 24035720)).forEach { id ->
-        inputRateLimiter.acquire()
         channel.send(id)
     }
   }
