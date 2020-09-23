@@ -42,7 +42,7 @@ fun main(args: Array<String>): Unit = runBlocking {
       .build()
   )
 
-  val channel = Channel<Int>()
+  val channel = Channel<Int>(Int.MAX_VALUE)
   val rate = (12000 / 60) - 10
   val writeRateLimiter = RateLimiter.create(rate.toDouble())
   val sendRateLimiter = RateLimiter.create(rate.toDouble())
