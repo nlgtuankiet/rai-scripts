@@ -75,7 +75,6 @@ fun main(args: Array<String>): Unit = runBlocking {
           .of("tikiandroid-1047", "global", "default_catalog", item.toString())
         try {
           writeRateLimiter.acquire()
-          println("after acquire $item")
           catalogClient.deleteCatalogItem(
             DeleteCatalogItemRequest.getDefaultInstance().toBuilder()
               .setName(name.toString())
