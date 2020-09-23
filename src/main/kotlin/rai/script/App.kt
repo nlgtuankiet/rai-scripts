@@ -52,13 +52,16 @@ fun main(args: Array<String>): Unit = runBlocking {
   println("fileName: $fileName firstItem: $firstItem")
 
   val ids = File(fileName).readLines()
-
+  var sendCount = 0
   launch {
     for (id in ids) {
       if (id > firstItem) {
         val actualInt = id.toIntOrNull()
         if (actualInt != null) {
           channel.send(actualInt)
+          if (sendCount++ % 1000 == 0) {
+            println("send $sendCount")
+          }
         }
       }
     }
