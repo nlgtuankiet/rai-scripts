@@ -55,6 +55,7 @@ fun main(args: Array<String>): Unit = runBlocking {
 
   launch {
     for (id in ids) {
+      println("check $id")
       if (id > firstItem) {
         val actualInt = id.toIntOrNull()
         if (actualInt != null) {
